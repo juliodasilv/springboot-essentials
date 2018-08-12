@@ -1,4 +1,4 @@
-package br.com.devdojo.awesome.error;
+package br.com.devdojo.error;
 
 public class CustomErrorType {
 

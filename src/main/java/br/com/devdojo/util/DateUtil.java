@@ -1,4 +1,4 @@
-package br.com.devdojo.awesome.util;
+package br.com.devdojo.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

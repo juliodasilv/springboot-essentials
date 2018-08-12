@@ -1,4 +1,4 @@
-package br.com.devdojo.awesome.error;
+package br.com.devdojo.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

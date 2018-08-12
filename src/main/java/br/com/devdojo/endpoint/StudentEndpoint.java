@@ -1,4 +1,4 @@
-package br.com.devdojo.awesome.endpoint;
+package br.com.devdojo.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.devdojo.awesome.error.ResourceNotFoundException;
-import br.com.devdojo.awesome.model.Student;
-import br.com.devdojo.awesome.repository.StudentRepository;
+import br.com.devdojo.error.ResourceNotFoundException;
+import br.com.devdojo.model.Student;
+import br.com.devdojo.repository.StudentRepository;
 
 @RestController
 @RequestMapping("students")

@@ -1,4 +1,4 @@
-package br.com.devdojo.awesome.model;
+package br.com.devdojo.model;
 
 import java.io.Serializable;
 
