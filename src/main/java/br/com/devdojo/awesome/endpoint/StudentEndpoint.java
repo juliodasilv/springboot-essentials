@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.devdojo.awesome.error.CustomErrorType;
+import br.com.devdojo.awesome.error.ResourceNotFoundException;
 import br.com.devdojo.awesome.model.Student;
 import br.com.devdojo.awesome.repository.StudentRepository;
 
@@ -34,9 +34,8 @@ public class StudentEndpoint {
 
 	@GetMapping(path="/{id}")
 	public ResponseEntity<?> findStudentById(@PathVariable("id") Long id){
-		Student student = studentDAO.findOne(id);		
-		if(student == null)
-			return new ResponseEntity<>(new CustomErrorType("Student not found"), HttpStatus.NOT_FOUND);
+		Student student = studentDAO.findOne(id);
+		verifyIfStudentExists(student, id);
 		return new ResponseEntity<>(student, HttpStatus.OK);
 	}
 
@@ -47,12 +46,14 @@ public class StudentEndpoint {
 
 	@DeleteMapping(path="/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id){
+		verifyIfStudentExists(studentDAO.findOne(id), id);
 		studentDAO.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Student student){
+		verifyIfStudentExists(studentDAO.findOne(student.getId()), student.getId());
 		studentDAO.save(student);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,5 +61,11 @@ public class StudentEndpoint {
 	@GetMapping(path="/findByName/{name}")
 	public ResponseEntity<?> findStudentsByName(@PathVariable("name") String name) {
 		return new ResponseEntity<>(studentDAO.findByNameIgnoreCaseContaining(name), HttpStatus.OK);
+	}
+
+	private Student verifyIfStudentExists(Student student, Long id) {
+		if(student == null)
+			throw new ResourceNotFoundException("Student not found for ID: " + id);
+		return student;
 	}
 }
