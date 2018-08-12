@@ -7,7 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.devdojo.awesome.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long>{
-
-	List<Student> findByName(String name);
-	
+	List<Student> findByNameIgnoreCaseContaining(String name);
 }
