@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import br.com.devdojo.awesome.util.DateUtil;
 @RequestMapping("students")
 public class StudentEndpoint {
 
+	@SuppressWarnings("unused")
 	private final DateUtil dateUtil;
 	
 	@Autowired
@@ -37,7 +39,9 @@ public class StudentEndpoint {
 		return new ResponseEntity<>(Student.studentList.get(index), HttpStatus.OK);
 	}
 
-	public DateUtil getDateUtil() {
-		return dateUtil;
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<?> save(@RequestBody Student student){
+		Student.studentList.add(student);
+		return new ResponseEntity<>(student, HttpStatus.CREATED);
 	}
 }

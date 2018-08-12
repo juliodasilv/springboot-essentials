@@ -1,7 +1,7 @@
 package br.com.devdojo.awesome.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Student implements Serializable{
@@ -12,7 +12,7 @@ public class Student implements Serializable{
 	
 	private String name;
 
-	public static List<Student> studentList;
+	public static List<Student> studentList = new ArrayList<>();
 	
 	static{
 		studentRepository();
@@ -52,7 +52,8 @@ public class Student implements Serializable{
 	}
 
 	private static void studentRepository(){
-		studentList = Arrays.asList(new Student(1, "Deku"), new Student(2, "Todoroki"));
+		studentList.add(new Student(1, "Deku"));
+		studentList.add(new Student(2, "Todoroki"));
 	}
 
 	@Override
