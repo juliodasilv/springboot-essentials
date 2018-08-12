@@ -1,5 +1,7 @@
 package br.com.devdojo.endpoint;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +42,7 @@ public class StudentEndpoint {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Student student){
+	public ResponseEntity<?> save(@Valid @RequestBody Student student){
 		return new ResponseEntity<>(studentDAO.save(student), HttpStatus.CREATED);
 	}
 
