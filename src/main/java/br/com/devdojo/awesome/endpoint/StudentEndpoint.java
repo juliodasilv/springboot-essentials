@@ -1,27 +1,43 @@
 package br.com.devdojo.awesome.endpoint;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.devdojo.awesome.error.CustomErrorType;
 import br.com.devdojo.awesome.model.Student;
 import br.com.devdojo.awesome.util.DateUtil;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("students")
 public class StudentEndpoint {
 
-	@Autowired
-	private DateUtil dateUtil;
+	private final DateUtil dateUtil;
 	
-	@RequestMapping(method=RequestMethod.GET, path="/list")
-	public List<Student> listAll(){
-		return Arrays.asList(new Student("Deku"), new Student("Todoroki"));
+	@Autowired
+	public StudentEndpoint(DateUtil dateUtil) {
+		this.dateUtil = dateUtil;
 	}
 	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<?> listAll(){
+		return new ResponseEntity<>(Student.studentList, HttpStatus.OK);
+	}
+
+	@RequestMapping(method=RequestMethod.GET, path="/{id}")
+	public ResponseEntity<?> findStudentById(@PathVariable("id") int id){
+		int index = Student.studentList.indexOf(new Student(id));
+		
+		if(index == -1)
+			return new ResponseEntity<>(new CustomErrorType("Student not found"), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(Student.studentList.get(index), HttpStatus.OK);
+	}
+
+	public DateUtil getDateUtil() {
+		return dateUtil;
+	}
 }
