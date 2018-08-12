@@ -14,50 +14,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.devdojo.awesome.error.CustomErrorType;
 import br.com.devdojo.awesome.model.Student;
-import br.com.devdojo.awesome.util.DateUtil;
+import br.com.devdojo.awesome.repository.StudentRepository;
 
 @RestController
 @RequestMapping("students")
 public class StudentEndpoint {
 
-	@SuppressWarnings("unused")
-	private final DateUtil dateUtil;
+	private final StudentRepository studentDAO;
 	
 	@Autowired
-	public StudentEndpoint(DateUtil dateUtil) {
-		this.dateUtil = dateUtil;
+	public StudentEndpoint(StudentRepository studentDAO) {
+		this.studentDAO = studentDAO;
 	}
 	
 	@GetMapping
 	public ResponseEntity<?> listAll(){
-		return new ResponseEntity<>(Student.studentList, HttpStatus.OK);
+		return new ResponseEntity<>(studentDAO.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping(path="/{id}")
-	public ResponseEntity<?> findStudentById(@PathVariable("id") int id){
-		int index = Student.studentList.indexOf(new Student(id));
-		
-		if(index == -1)
+	public ResponseEntity<?> findStudentById(@PathVariable("id") Long id){
+		Student student = studentDAO.findOne(id);		
+		if(student == null)
 			return new ResponseEntity<>(new CustomErrorType("Student not found"), HttpStatus.NOT_FOUND);
-		return new ResponseEntity<>(Student.studentList.get(index), HttpStatus.OK);
+		return new ResponseEntity<>(student, HttpStatus.OK);
 	}
 
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Student student){
-		Student.studentList.add(student);
-		return new ResponseEntity<>(student, HttpStatus.CREATED);
+		return new ResponseEntity<>(studentDAO.save(student), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> delete(@RequestBody Student student){
-		Student.studentList.remove(student);
+	@DeleteMapping(path="/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") Long id){
+		studentDAO.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody Student student){
-		Student.studentList.remove(student);
-		Student.studentList.add(student);
+		studentDAO.save(student);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
