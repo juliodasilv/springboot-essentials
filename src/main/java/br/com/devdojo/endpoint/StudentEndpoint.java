@@ -23,7 +23,7 @@ import br.com.devdojo.model.Student;
 import br.com.devdojo.repository.StudentRepository;
 
 @RestController
-@RequestMapping("students")
+@RequestMapping("v1")
 public class StudentEndpoint {
 
 	private final StudentRepository studentDAO;
@@ -33,24 +33,24 @@ public class StudentEndpoint {
 		this.studentDAO = studentDAO;
 	}
 	
-	@GetMapping
+	@GetMapping(path="protected/students")
 	public ResponseEntity<?> listAll(Pageable pageable){
 		return new ResponseEntity<>(studentDAO.findAll(pageable), HttpStatus.OK);
 	}
 
-	@GetMapping(path="/{id}")
+	@GetMapping(path="protected/students/{id}")
 	public ResponseEntity<?> findStudentById(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails){
 		Student student = studentDAO.findOne(id);
 		verifyIfStudentExists(student, id);
 		return new ResponseEntity<>(student, HttpStatus.OK);
 	}
 
-	@PostMapping
+	@PostMapping(path="admin/students")
 	public ResponseEntity<?> save(@Valid @RequestBody Student student){
 		return new ResponseEntity<>(studentDAO.save(student), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(path="/{id}")
+	@DeleteMapping(path="admin/students/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id){
 		verifyIfStudentExists(studentDAO.findOne(id), id);
@@ -58,14 +58,14 @@ public class StudentEndpoint {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@PutMapping
+	@PutMapping(path="admin/students")
 	public ResponseEntity<?> update(@RequestBody Student student){
 		verifyIfStudentExists(studentDAO.findOne(student.getId()), student.getId());
 		studentDAO.save(student);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping(path="/findByName/{name}")
+	@GetMapping(path="protected/students/findByName/{name}")
 	public ResponseEntity<?> findStudentsByName(@PathVariable("name") String name) {
 		return new ResponseEntity<>(studentDAO.findByNameIgnoreCaseContaining(name), HttpStatus.OK);
 	}
