@@ -2,39 +2,21 @@
 
 package br.com.devdojo.javaclient;
 
-import java.util.Arrays;
-
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import br.com.devdojo.model.PageableResponse;
 import br.com.devdojo.model.Student;
 
 public class JavaSpringClientTest {
 	public static void main(String[] args) {
-		RestTemplate restTemplate = new RestTemplateBuilder()
-				.rootUri("http://localhost:8080/v1/protected/students")
-				.basicAuthorization("juliodasilv", "Athena00)")
-				.build();
+        Student studentPost = new Student();
+        studentPost.setName("John Wick 2");
+        studentPost.setEmail("john@pencil.com");
+//        studentPost.setId(29L);
+        JavaClientDAO dao = new JavaClientDAO();
+//        System.out.println(dao.findById(111));
+//        List<Student> students = dao.listAll();
+//        System.out.println(students);
+//        System.out.println(dao.save(studentPost));
+//        dao.update(studentPost);
+        dao.delete(29);
 		
-		//Retorna diretamente o objeto student
-		Student student = restTemplate.getForObject("/{id}", Student.class, "1");
-		System.out.println(student);
-		
-		//Retorna o objeto student junto com os cabecalhos http
-		ResponseEntity<Student> forEntity = restTemplate.getForEntity("/{id}", Student.class, "1");
-		System.out.println(forEntity.getBody());
-		
-		//Retorna um array de student
-//		Student[] students = restTemplate.getForObject("/", Student[].class);
-//		System.out.println(Arrays.toString(students));
-		
-		//Retorna uma lista de student com os cabeçalhos http
-		ResponseEntity<PageableResponse<Student>> exchange = restTemplate.exchange("/?sort=id,desc&sort=name,desc", HttpMethod.GET, null, new ParameterizedTypeReference<PageableResponse<Student>>() {
-		});
-		System.out.println(exchange.getBody());
 	}
 }
