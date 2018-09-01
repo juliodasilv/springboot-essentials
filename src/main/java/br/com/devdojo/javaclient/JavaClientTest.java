@@ -14,7 +14,7 @@ public class JavaClientTest {
 		BufferedReader reader = null;
 		
 		String user = "juliodasilv";
-		String password = "Athena00)";
+		String password = "12345678";
 		
 		try{
 			URL url= new URL("http://localhost:8080/v1/protected/students/1");
@@ -42,5 +42,4 @@ public class JavaClientTest {
 		String userPassword = user + ":" + password;
 		return new String(Base64.encodeBase64(userPassword.getBytes()));
 	}
-	
 }

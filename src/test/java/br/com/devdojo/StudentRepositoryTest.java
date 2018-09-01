@@ -18,7 +18,7 @@ import br.com.devdojo.repository.StudentRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class SpringBootEssentialsApplicationTest {
+public class StudentRepositoryTest {
 
 	@Autowired
 	private StudentRepository studentRepository;
